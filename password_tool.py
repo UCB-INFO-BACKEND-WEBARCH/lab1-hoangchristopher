@@ -51,7 +51,54 @@ def check_password_strength(password):
     Hint: Use .isdigit(), .isupper(), .islower() and string.punctuation
     """
     # TODO: Implement this function
-    pass
+    score = 0
+    strength = ""
+    feedback = []
+
+    if len(password) >= 12:
+        score += 30
+    elif len(password) >= 8:
+        score += 20
+    else:
+        feedback.append("Try a longer password")
+    
+    for c in password:
+        if c.isdigit():
+            score += 20
+            break
+    
+    for c in password:
+        if c.isupper():
+            score += 20
+            break
+    
+    for c in password:
+        if c.islower():
+            score += 20
+            break
+    
+    if password in string.punctuation:
+        score += 20
+        feedback.append("Try adding a special character")
+
+    if password not in COMMON_PASSWORDS:
+        score += 10
+        feedback.append("Your password is too common.")
+
+    if score >= 70:
+        strength = "Strong" 
+    elif score >= 40:
+        strength = "Medium"
+    else:
+        strength = "Weak"
+
+    return { 
+        "password" : password,
+        "score" : score,
+        "strength" : strength,
+        "feedback" : feedback
+    }
+
 
 
 # ============================================
@@ -83,7 +130,24 @@ def generate_password(length=12, use_special=True):
           string.digits, and random.choice()
     """
     # TODO: Implement this function
-    pass
+    length = max(length, 8)
+    random_password = []
+    character_pool = []
+    character_pool = string.ascii_uppercase + string.ascii_lowercase + string.digits
+
+    if use_special:
+        character_pool += string.punctuation
+    
+    random_password.append(random.choice(string.ascii_uppercase))
+    random_password.append(random.choice(string.ascii_lowercase))
+    random_password.append(random.choice(string.digits))
+
+    for _ in range(length - len(random_password)):
+        random_password.append(random.choice(character_pool))
+
+    return "".join(random_password)
+
+
 
 
 # ============================================
